@@ -1,6 +1,6 @@
 {
   "name": "convert-key",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "转换对象key的名称",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

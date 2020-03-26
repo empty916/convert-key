@@ -9,8 +9,8 @@ function _reverseKey(convertKeyMaps) {
     if (!isObj(convertKeyMaps)) {
         throw new Error('convertKeyMaps必须是对象！');
     }
-    return Object.keys(convertKeyMaps).reduce((res, oldKey) => {
-        const newKey = convertKeyMaps[oldKey];
+    return Object.keys(convertKeyMaps).reduce(function (res, oldKey) {
+        var newKey = convertKeyMaps[oldKey];
         res[newKey] = oldKey;
         return res;
     }, {});
@@ -22,8 +22,8 @@ function _convertKeyOfObj(convertKeyMaps, obj) {
     if (!isObj(obj)) {
         throw new Error('obj必须是对象！');
     }
-    return Object.keys(convertKeyMaps).reduce((res, oldKey) => {
-        const newKey = convertKeyMaps[oldKey];
+    return Object.keys(convertKeyMaps).reduce(function (res, oldKey) {
+        var newKey = convertKeyMaps[oldKey];
         res[newKey] = obj[oldKey];
         return res;
     }, {});
@@ -54,9 +54,9 @@ function _convertKeyOfObj(convertKeyMaps, obj) {
  * }
  */
 function convertKey(convertKeyMaps) {
-    const reverseKeyMap = _reverseKey(convertKeyMaps);
-    const convert = (obj) => _convertKeyOfObj(convertKeyMaps, obj);
-    convert.revert = (obj) => _convertKeyOfObj(reverseKeyMap, obj);
+    var reverseKeyMap = _reverseKey(convertKeyMaps);
+    var convert = function (obj) { return _convertKeyOfObj(convertKeyMaps, obj); };
+    convert.revert = function (obj) { return _convertKeyOfObj(reverseKeyMap, obj); };
     return convert;
 }
 export default convertKey;
