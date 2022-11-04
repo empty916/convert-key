@@ -5,58 +5,93 @@
 function isObj(obj) {
     return typeof obj === 'object' && obj !== null;
 }
-function _reverseKey(convertKeyMaps) {
-    if (!isObj(convertKeyMaps)) {
-        throw new Error('convertKeyMaps必须是对象！');
-    }
-    return Object.keys(convertKeyMaps).reduce(function (res, oldKey) {
-        var newKey = convertKeyMaps[oldKey];
-        res[newKey] = oldKey;
-        return res;
-    }, {});
-}
-function _convertKeyOfObj(convertKeyMaps, obj) {
-    if (!isObj(convertKeyMaps)) {
-        throw new Error('convertKeyMaps必须是对象！');
-    }
-    if (!isObj(obj)) {
-        throw new Error('obj必须是对象！');
-    }
-    return Object.keys(convertKeyMaps).reduce(function (res, oldKey) {
-        var newKey = convertKeyMaps[oldKey];
-        res[newKey] = obj[oldKey];
-        return res;
-    }, {});
-}
 /**
- * 转换key
- * @param {*} convertKeyMaps
- * @return convert
+ * @example
+ * import createConvertUtil from 'convert-key';
  *
- * const convertKeyMaps = {
- *  a: 'name',
- *  b: 'age',
- * };
+ * const keyMaps = {
+ * 	a: 'A1',
+ * 	b: 'B1',
+ * 	f: 'F1'
+ * } as const;
+ *
  * const data = {
- *  a: 'tom',
- *  b: 11,
+ * 	a: 1,
+ * 	b: {
+ * 	    b1: 1,
+ * 	    b2: {},
+ * 	    b3: '1'
+ * 	},
+ * 	c: null,
+ * 	d: ''
  * }
- * const convert = convertKey(convertKeyMaps);
- * const myData = convert(data);
- * myData: {
- *  name: 'tom',
- *  age: 11,
+ * const {convert, revert} = createConvertUtil(keyMaps);
+ * const convertData = convert(data);
+ *
+ * // convertData is
+ * {
+ *     A1: number;
+ *     B1: {
+ *         b1: number;
+ *         b2: {};
+ *         b3: string;
+ *     };
+ *     c: null;
+ *     d: string;
  * }
  *
- * convert.revert(myData): {
- *  a: 'tom',
- *  b: 11,
- * }
+ * // originalData is equal to data
+ * const originalData = revert(convertData);
+ * @param keyMaps key maps
+ * @returns
  */
-function convertKey(convertKeyMaps) {
-    var reverseKeyMap = _reverseKey(convertKeyMaps);
-    var convert = function (obj) { return _convertKeyOfObj(convertKeyMaps, obj); };
-    convert.revert = function (obj) { return _convertKeyOfObj(reverseKeyMap, obj); };
-    return convert;
-}
-export default convertKey;
+var createConvertUtil = function (keyMaps) {
+    if (!isObj(keyMaps)) {
+        throw new Error('convert-key: keyMaps must be an Object!');
+    }
+    var convert = function (data) {
+        if (!isObj(data)) {
+            throw new Error('convert-key: data must be an Object!');
+        }
+        var Res = Object.keys(data).reduce(function (res, k) {
+            if (keyMaps[k]) {
+                // @ts-ignore
+                res[keyMaps[k]] = data[k];
+            }
+            else {
+                // @ts-ignore
+                res[k] = data[k];
+            }
+            return res;
+        }, {});
+        return Res;
+    };
+    var revertKeyMaps = Object.keys(keyMaps).reduce(function (res, k) {
+        // @ts-ignore
+        res[keyMaps[k]] = k;
+        return res;
+    }, {});
+    var revert = function (data) {
+        if (!isObj(data)) {
+            throw new Error('convert-key: data must be an Object!');
+        }
+        var Res = Object.keys(data).reduce(function (res, k) {
+            // @ts-ignore
+            if (revertKeyMaps[k]) {
+                // @ts-ignore
+                res[revertKeyMaps[k]] = data[k];
+            }
+            else {
+                // @ts-ignore
+                res[k] = data[k];
+            }
+            return res;
+        }, {});
+        return Res;
+    };
+    return {
+        convert: convert,
+        revert: revert
+    };
+};
+export default createConvertUtil;

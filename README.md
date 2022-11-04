@@ -1,44 +1,48 @@
 # convert-key
 
 
-作用是转化key的名称，**此工具可以做前后端的接口数据隔离，建议将接口适配放到service模块中**
+this package is used to convert key name of an object and revert a converted object to original key
+
 
   ```typescript
-  import convertKey from 'convert-key'
+  import createConvertUtil from 'convert-key'
 
   const keyMaps = {
-    pdName: 'productName',
-    uName: 'userName',
-  }
-  type KeyMaps = {
-    pdName: 'productName',
-    uName: 'userName',
+      a: 'A1',
+      b: 'B1',
+      f: 'F1'
+  } as const; // keyMaps Object must be delared as a const
+
+  const {convert, revert} = createConvertUtil(keyMaps);
+
+  const data = {
+    a: 1,
+    b: {
+        b1: 1,
+        b2: {},
+        b3: '1'
+    },
+    c: null,
+    d: ''
   }
 
-  const convertDataKey = convertKey<KeyMaps>(keyMaps);
-
-  const myData = convertDataKey({
-    pdName: '余额宝',
-    uName: 'tom',
-  });
 
   /**
-   * myData: {
-   *  productName: '余额宝',
-   *  userName: 'tom',
+   * {
+   *     A1: number;
+   *     B1: {
+   *         b1: number;
+   *         b2: {};
+   *         b3: string;
+   *     };
+   *     c: null;
+   *     d: string;
    * }
    * 
   */
+  const convertedData = convert(data);
 
-  // 如果想要转换回去，可以使用
-  const theirData = convertDataKey.revert(myData);
-
-  /**
-   * theirData: {
-   *  pdName: '余额宝',
-   *  uName: 'tom',
-   * }
-   * 
-  */
+  // revert back
+  const sameAsData = revert(convertedData);
 
   ```
