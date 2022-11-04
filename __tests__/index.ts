@@ -15,17 +15,7 @@ const data = {
   },
   c: null,
   d: "",
-};
-
-const revertData = {
-  A1: 1,
-  B1: {
-    b1: 1,
-    b2: {},
-    b3: "1",
-  },
-  c: null,
-  d: "",
+  // f: {}
 };
 
 test("create", () => {
@@ -52,12 +42,10 @@ test("create", () => {
 
 test("convert", () => {
   const { convert } = createConvertUtil(keyMaps);
-
-  expect(convert(data)).toEqual(revertData);
+  expect(convert(data)).toMatchSnapshot();
 });
 
 test("revert", () => {
-  const { revert } = createConvertUtil(keyMaps);
-
-  expect(revert(revertData)).toEqual(data);
+  const { convert, revert } = createConvertUtil(keyMaps);
+  expect(revert(convert(data))).toEqual(data);
 });

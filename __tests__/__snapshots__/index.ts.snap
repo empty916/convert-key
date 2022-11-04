@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`convert 1`] = `
+{
+  "A1": 1,
+  "B1": {
+    "b1": 1,
+    "b2": {},
+    "b3": "1",
+  },
+  "c": null,
+  "d": "",
+}
+`;
