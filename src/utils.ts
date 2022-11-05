@@ -43,7 +43,7 @@ export type ConvertObj<
     [PK in keyof D as Exclude<PK, keyof KM>]: D[PK];
   }
 > = {
-  [k in keyof R as R[k] extends never ? never : k]: R[k];
+  -readonly [k in keyof R as R[k] extends never ? never : k]: R[k];
 };
 
 
