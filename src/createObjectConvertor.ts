@@ -1,9 +1,15 @@
 import { KeyMaps } from "./model";
-import { ConvertDataDeep, getRevertKeyMaps, isObj, isObjArray } from "./utils";
+import { getRevertKeyMaps, isObj } from "./utils";
 
 export const convertObj = <
   KM extends KeyMaps,
-  D extends Partial<{ [k in keyof KM]: any }>
+  D extends Partial<{ [k in keyof KM]: any }>,
+  MK = {
+    [K in keyof D]: K extends keyof KM ? KM[K]: K
+  },
+  OK = {
+    [K in keyof MK as Extract<MK[K], string>]: K
+  }
 >(
   keyMaps: KM,
   data: D
@@ -23,16 +29,15 @@ export const convertObj = <
       return res;
     },
     {} as {
-      -readonly [PK in keyof KM as KM[PK]]: D[Extract<PK, keyof D>];
+      [PK in keyof KM as KM[PK]]: D[Extract<PK, keyof D>];
     } & {
       [PK in keyof D as Exclude<PK, keyof KM>]: D[PK];
     }
   );
 
   type TR = typeof Res;
-  type CK = keyof typeof Res;
-  return Res as {
-    [k in CK as TR[k] extends never ? never : k]: TR[k];
+  return Res as unknown as {
+    [k in keyof OK]: TR[Extract<k, keyof TR>];
   };
 };
 
@@ -89,9 +94,6 @@ export const createObjectConvertor = <KM extends KeyMaps>(keyMaps: KM) => {
   type RKM = typeof revertKeyMaps;
 
   const revert = <D extends Partial<{ [k in keyof RKM]: any }>>(data: D) => {
-    if (!isObj(data)) {
-      throw new Error("convert-key: data must be an Object!");
-    }
     return convertObj(revertKeyMaps, data);
   };
   return {

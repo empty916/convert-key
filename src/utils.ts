@@ -31,9 +31,7 @@ export function getRevertKeyMaps<KM extends KeyMaps>(keyMaps: KM) {
   );
 }
 
-/**
- * Copy from d.ts file where is builded from createObjectConvertor.ts
- */
+
 export type ConvertObj<
   KM extends KeyMaps,
   D extends Partial<{ [k in keyof KM]: any }>,
@@ -41,9 +39,15 @@ export type ConvertObj<
     [PK in keyof KM as KM[PK]]: D[Extract<PK, keyof D>];
   } & {
     [PK in keyof D as Exclude<PK, keyof KM>]: D[PK];
+  },
+  MK = {
+    [K in keyof D]: K extends keyof KM ? KM[K]: K
+  },
+  OK = {
+    -readonly [K in keyof MK as Extract<MK[K], string>]: K
   }
 > = {
-  -readonly [k in keyof R as R[k] extends never ? never : k]: R[k];
+  [k in keyof OK]: R[Extract<k, keyof R>];
 };
 
 
@@ -56,11 +60,17 @@ export type ConvertDataDeep<
   } & {
     [PK in keyof D as Exclude<PK, keyof KM>]: D[PK];
   },
+  MK = {
+    [K in keyof D]: K extends keyof KM ? KM[K]: K
+  },
+  OK = {
+    [K in keyof MK as Extract<MK[K], string>]: K
+  },
   NNR = {
-    [k in keyof DR as DR[k] extends never ? never : k]: DR[k];
+    [k in keyof OK]: DR[Extract<k, keyof DR>];
   }
 > = O extends Array<any> ?  ConvertDataDeep<KM, Extract<D, Partial<{ [k in keyof KM]: any }>>>[] : {
-  -readonly [K in keyof NNR]: NNR[K] extends Partial<{ [k in keyof KM]: any }> | Partial<{ [k in keyof KM]: any }>[]
+  [K in keyof NNR]: NNR[K] extends Partial<{ [k in keyof KM]: any }> | Partial<{ [k in keyof KM]: any }>[]
     ? ConvertDataDeep<KM, NNR[K]>
     : NNR[K];
 };

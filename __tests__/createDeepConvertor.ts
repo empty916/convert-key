@@ -49,6 +49,34 @@ const data2 = {
   // f: {}
 };
 
+
+
+const data3 = {
+  a: 1,
+  b: {
+    b: 1,
+    b2: {
+      b: [
+        {
+          b: 1,
+          b2: {},
+          b3: "1",
+          f: {}
+        },
+      ],
+    },
+    b3: "1",
+    b4: {
+      b1: 1,
+      b2: {},
+      b3: "1",
+    },
+  },
+  c: null,
+  d: "",
+  // f: {}
+};
+
 test("create", () => {
   // @ts-ignore
   expect(() => createDeepConvertor(null)).toThrow();
@@ -89,4 +117,14 @@ test("convert obj", () => {
   expect(cd).not.toEqual(data2);
   expect(cd).toMatchSnapshot();
   expect(od).toEqual(data2);
+});
+
+test("convert obj2", () => {
+  const { convert, revert } = createDeepConvertor(keyMaps);
+
+  const cd = convert(data3);
+  const od = revert(cd);
+  expect(cd).not.toEqual(data3);
+  expect(cd).toMatchSnapshot();
+  expect(od).toEqual(data3);
 });

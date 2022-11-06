@@ -1,8 +1,8 @@
 import { createObjectConvertor } from "../src/createObjectConvertor";
 
 const keyMaps = {
-  a: "A1",
   b: "B1",
+  a: "A1",
   f: "F1",
 } as const; // keyMaps Object must be delared as a const
 
@@ -17,6 +17,7 @@ const data = {
   d: "",
   // f: {}
 };
+
 
 test("create", () => {
   // @ts-ignore
