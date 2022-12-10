@@ -1,6 +1,6 @@
 {
   "name": "convert-key",
-  "version": "2.0.0-beta3",
+  "version": "2.0.0",
   "description": "convert data key",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
