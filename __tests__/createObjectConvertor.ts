@@ -25,20 +25,6 @@ test("create", () => {
 
   const { convert, revert } = createObjectConvertor(keyMaps);
 
-  // @ts-ignore
-  expect(() => convert(null)).toThrow();
-  // @ts-ignore
-  expect(() => convert(1)).toThrow();
-  // @ts-ignore
-  expect(() => convert("null")).toThrow();
-
-  // @ts-ignore
-  // @ts-ignore
-  expect(() => revert(null)).toThrow();
-  // @ts-ignore
-  expect(() => revert(1)).toThrow();
-  // @ts-ignore
-  expect(() => revert("null")).toThrow();
 });
 
 test("convert", () => {

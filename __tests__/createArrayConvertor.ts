@@ -39,24 +39,8 @@ test("create", () => {
   expect(() => createArrayConvertor(null)).toThrow();
 
   const {convert, revert} = createArrayConvertor(keyMaps);
-  // @ts-ignore
-  expect(() => convert(1)).toThrow();
-  // @ts-ignore
-  expect(() => convert('1')).toThrow();
-  // @ts-ignore
-  expect(() => convert([1])).toThrow();
-  // @ts-ignore
-  expect(() => convert(['1'])).toThrow();
+  
 
-
-  // @ts-ignore
-  expect(() => revert(1)).toThrow();
-  // @ts-ignore
-  expect(() => revert('1')).toThrow();
-  // @ts-ignore
-  expect(() => revert([1])).toThrow();
-  // @ts-ignore
-  expect(() => revert(['1'])).toThrow();
 });
 
 test('convert', () => {

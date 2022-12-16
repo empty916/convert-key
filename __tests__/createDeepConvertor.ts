@@ -83,20 +83,6 @@ test("create", () => {
 
   const { convert, revert } = createDeepConvertor(keyMaps);
 
-  // @ts-ignore
-  expect(() => convert(null)).toThrow();
-  // @ts-ignore
-  expect(() => convert(1)).toThrow();
-  // @ts-ignore
-  expect(() => convert("null")).toThrow();
-
-  // @ts-ignore
-  // @ts-ignore
-  expect(() => revert(null)).toThrow();
-  // @ts-ignore
-  expect(() => revert(1)).toThrow();
-  // @ts-ignore
-  expect(() => revert("null")).toThrow();
 });
 
 test("convert arr", () => {
@@ -127,4 +113,22 @@ test("convert obj2", () => {
   expect(cd).not.toEqual(data3);
   expect(cd).toMatchSnapshot();
   expect(od).toEqual(data3);
+});
+
+test("convert array of base type", () => {
+  const { convert, revert } = createDeepConvertor(keyMaps);
+
+  const data = {
+    a: {
+      b: 1,
+      c: [1,2,3],
+      d: ['1', '2', '3'],
+      f: [{a: 1}]
+    }
+  }
+  const cd = convert(data);
+  const od = revert(cd);
+  expect(cd).not.toEqual(data);
+  expect(cd).toMatchSnapshot();
+  expect(od).toEqual(data);
 });

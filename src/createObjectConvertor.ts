@@ -15,7 +15,8 @@ export const convertObj = <
   data: D
 ) => {
   if (!isObj(data)) {
-    throw new Error("convert-key: data must be an Object!");
+    return data;
+    // throw new Error("convert-key: data must be an Object!");
   }
   const Res = Object.keys(data).reduce(
     (res, k) => {

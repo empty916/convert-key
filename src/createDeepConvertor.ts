@@ -11,7 +11,8 @@ export const convertDataDeep = <
   data: D
 ): ConvertDataDeep<KM, D> => {
   if (!isObj(data) && !isObjArray(data)) {
-    throw new Error("convert-key createDeepConvertor: data must be an Object Or an Object Array!");
+    return data;
+    // throw new Error("convert-key createDeepConvertor: data must be an Object Or an Object Array!");
   }
   if (Array.isArray(data)) {
     // @ts-ignore
